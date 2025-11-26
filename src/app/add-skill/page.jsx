@@ -14,32 +14,35 @@ const AddCourse = () => {
     setLoading(true);
 
     const formData = {
-      name: e.target.name.value,
-      category: e.target.category.value,
-      description: e.target.description.value,
-      thumbnailUrl: e.target.thumbnailUrl.value,
+      title: e.target.title.value,
+      short_description: e.target.short_description.value,
+      full_description: e.target.full_description.value,
+      price: parseFloat(e.target.price.value),
+      currency: "USD",
+      date: e.target.date.value,
+      priority: e.target.priority.value,
+      image_url: e.target.image_url.value || null,
       created_at: new Date(),
       created_by: user.email,
     };
 
-    fetch("https://skills-dev-platform-server.onrender.com/skills", {
+    fetch("http://localhost:3000/skills", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     })
       .then((res) => res.json())
       .then((data) => {
         Swal.fire({
           title: "Success!",
-          html: `Your <span class="font-bold text-blue-600">${formData.name}</span> course has been added successfully.`,
+          html: `Your <span class="font-bold text-blue-600">${formData.title}</span> course has been added successfully.`,
           icon: "success",
           confirmButtonColor: "#3085d6",
         });
+        e.target.reset();
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         Swal.fire({
           title: "Error!",
           text: "Something went wrong. Please try again.",
@@ -47,9 +50,7 @@ const AddCourse = () => {
           confirmButtonColor: "#d33",
         });
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -63,63 +64,101 @@ const AddCourse = () => {
           onSubmit={handleSubmit}
           className="space-y-5 bg-white p-6 shadow-lg rounded-xl"
         >
-          {/* Course Name */}
+          {/* Title */}
           <div>
             <label className="block font-semibold text-blue-600 mb-1">
-              Course Name
+              Title
             </label>
             <input
               type="text"
-              name="name"
-              placeholder="Enter course name"
+              name="title"
+              placeholder="Enter course title"
               required
               className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
             />
           </div>
 
-          {/* Category */}
+          {/* Short Description */}
           <div>
             <label className="block font-semibold text-blue-600 mb-1">
-              Category
+              Short Description
             </label>
-            <select
-              name="category"
+            <input
+              type="text"
+              name="short_description"
+              placeholder="Enter a short description"
               required
               className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
-            >
-              <option value="">Select Category</option>
-              <option value="Math">Math</option>
-              <option value="Science">Science</option>
-              <option value="Programming">Programming</option>
-              <option value="Design">Design</option>
-              <option value="Business">Business</option>
-            </select>
+            />
           </div>
 
-          {/* Description */}
+          {/* Full Description */}
           <div>
             <label className="block font-semibold text-blue-600 mb-1">
-              Description
+              Full Description
             </label>
             <textarea
-              name="description"
-              placeholder="Enter a detailed course description"
+              name="full_description"
+              placeholder="Enter a detailed description"
               rows="4"
               required
               className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
             />
           </div>
 
-          {/* Thumbnail URL */}
+          {/* Price */}
           <div>
             <label className="block font-semibold text-blue-600 mb-1">
-              Thumbnail URL
+              Price (USD)
+            </label>
+            <input
+              type="number"
+              name="price"
+              placeholder="Enter price in USD"
+              required
+              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
+            />
+          </div>
+
+          {/* Date */}
+          <div>
+            <label className="block font-semibold text-blue-600 mb-1">
+              Date
+            </label>
+            <input
+              type="date"
+              name="date"
+              required
+              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
+            />
+          </div>
+
+          {/* Priority */}
+          <div>
+            <label className="block font-semibold text-blue-600 mb-1">
+              Priority
+            </label>
+            <select
+              name="priority"
+              required
+              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
+            >
+              <option value="">Select Priority</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+
+          {/* Image URL */}
+          <div>
+            <label className="block font-semibold text-blue-600 mb-1">
+              Image URL (optional)
             </label>
             <input
               type="text"
-              name="thumbnailUrl"
+              name="image_url"
               placeholder="https://example.com/image.jpg"
-              required
               className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
             />
           </div>
@@ -143,3 +182,4 @@ const AddCourse = () => {
 };
 
 export default AddCourse;
+

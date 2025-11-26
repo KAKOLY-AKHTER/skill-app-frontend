@@ -11,7 +11,7 @@ export default function AllSkills() {
   useEffect(() => {
     const loadData = async () => {
       const res = await fetch(
-        "https://skills-dev-platform-server.onrender.com/skills"
+        "http://localhost:3000/skills"
       );
       const data = await res.json();
       setCourses(data);
